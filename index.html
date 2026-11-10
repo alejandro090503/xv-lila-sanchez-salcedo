@@ -1590,6 +1590,49 @@ body.gift-locked{overflow:hidden}
 @keyframes sheen{0%{transform:skewX(-18deg) translateX(0);opacity:1}100%{transform:skewX(-18deg) translateX(420%);opacity:1}}
 #ely-confetti{position:fixed;inset:0;z-index:80;pointer-events:none;width:100%;height:100%}
 @media (prefers-reduced-motion:reduce){.ely-full,.ely-full li,.ely-nav{transition-duration:.01s!important}}
+
+/* ── Ajustes 2 ── */
+/* Lluvia de sobres dentro de la tarjeta */
+.gr-envscene{position:relative;width:min(230px,66vw);aspect-ratio:260/200;margin:0 auto 14px}
+.gr-rain{position:absolute;left:-18%;right:-18%;top:-34%;bottom:-6%;overflow:hidden;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 22%,#000 72%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 22%,#000 72%,transparent 100%)}
+.gr-rain span{position:absolute;top:-24px;left:var(--x);width:var(--w);opacity:0;
+  animation:grRain var(--t) linear var(--d) infinite}
+.gr-rain svg{width:100%;height:auto;display:block}
+@keyframes grRain{0%{transform:translateY(0) rotate(var(--r));opacity:0}12%{opacity:.8}80%{opacity:.7}
+  100%{transform:translateY(240px) rotate(calc(var(--r)*-1.6));opacity:0}}
+.gr-env{position:relative;z-index:1;width:100%;height:100%;display:block;filter:drop-shadow(0 10px 22px rgba(14,34,71,.22))}
+@media (prefers-reduced-motion:no-preference){.gr-env{animation:envBreathe 3.6s ease-in-out infinite}}
+@media (prefers-reduced-motion:reduce){.gr-rain span{animation:none;opacity:.5;transform:translateY(60px) rotate(var(--r))}}
+.gr-logo img[src*="bbva"]{max-height:40px}
+
+/* Bolita de colores reservados */
+.dc-orb{position:relative;display:block;width:58px;height:58px;margin:4px auto 14px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#5C7BEA 0%,#2346C8 38%,#13299A 100%);
+  box-shadow:0 8px 22px rgba(19,41,154,.35),inset 0 -4px 10px rgba(0,0,0,.18)}
+.dc-orb i{position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#FFFFFF 0%,#E4E7EC 30%,#B8BEC8 70%,#8E95A2 100%);
+  box-shadow:0 8px 22px rgba(120,128,142,.4),inset 0 -4px 10px rgba(0,0,0,.12);opacity:0}
+@media (prefers-reduced-motion:no-preference){
+  .dc-orb i{animation:orbMix 6s ease-in-out infinite}
+  .dc-orb{animation:orbGlow 6s ease-in-out infinite}
+}
+@keyframes orbMix{0%,15%{opacity:0;filter:blur(0)}40%{filter:blur(1.5px)}50%,65%{opacity:1;filter:blur(0)}90%{filter:blur(1.5px)}100%{opacity:0;filter:blur(0)}}
+@keyframes orbGlow{0%,15%,100%{box-shadow:0 8px 22px rgba(19,41,154,.35)}50%,65%{box-shadow:0 8px 22px rgba(120,128,142,.4)}}
+
+/* Fondos con más movimiento */
+@media (prefers-reduced-motion:no-preference){
+  .sec-flora{animation:floraDrift 16s ease-in-out infinite alternate}
+  #familia .sec-flora,#dresscode .sec-flora,#album .sec-flora{animation-duration:19s;animation-direction:alternate-reverse}
+  @keyframes floraDrift{0%{translate:-2.5% 1.5%;scale:1.06;rotate:-1deg}100%{translate:2.5% -2%;scale:1.13;rotate:1.2deg}}
+  .hero-bg{animation:heroDrift 18s ease-in-out infinite alternate!important}
+  @keyframes heroDrift{0%{scale:1;translate:0 0}100%{scale:1.1;translate:-2% -1.5%}}
+}
+
+/* Álbum: QR difuminado */
+.album-qr img{-webkit-mask-image:radial-gradient(circle,#000 58%,transparent 100%);mask-image:radial-gradient(circle,#000 58%,transparent 100%)}
+.album-qr.bloqueado img{filter:blur(9px) saturate(.8)!important;opacity:.7!important}
 </style>
 </head>
 <body>
@@ -2067,6 +2110,7 @@ body.gift-locked{overflow:hidden}
     </div>
 
     <div class="dc-avoid-section rv">
+      <span class="dc-orb" role="img" aria-label="Azul rey y plateado"><i></i></span>
       <p class="dc-avoid-text">Los colores <strong>azul rey</strong> y <strong>plateado</strong> están reservados exclusivamente para la quinceañera.</p>
     </div>
 
@@ -2162,12 +2206,20 @@ body.gift-locked{overflow:hidden}
             <div class="gr-track" id="gr-track">
 
               <div class="gr-slide">
-                <div class="gr-logo">
-                  <svg viewBox="0 0 52 52" fill="none" stroke="var(--gold-deep)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="8" y="22" width="36" height="24" rx="5"/>
-                    <path d="M8 30 Q26 38 44 30"/>
-                    <rect x="18" y="8" width="16" height="16" rx="2"/>
-                    <path d="M18 8 Q26 3 34 8"/>
+                <div class="gr-envscene" aria-hidden="true">
+                  <div class="gr-rain"><span style="--x:6%;--d:0s;--t:4.2s;--w:18px;--r:-20deg"><svg viewBox="0 0 34 24"><rect x="1" y="1" width="32" height="22" rx="2.5" fill="#FDFBF5" stroke="#1B3A6B" stroke-width="1.2"/><path d="M1 1 L17 13 L33 1" fill="none" stroke="#1B3A6B" stroke-width="1.2" stroke-linejoin="round"/></svg></span><span style="--x:20%;--d:1.6s;--t:5s;--w:14px;--r:25deg"><svg viewBox="0 0 34 24"><rect x="1" y="1" width="32" height="22" rx="2.5" fill="#FDFBF5" stroke="#1B3A6B" stroke-width="1.2"/><path d="M1 1 L17 13 L33 1" fill="none" stroke="#1B3A6B" stroke-width="1.2" stroke-linejoin="round"/></svg></span><span style="--x:34%;--d:0.7s;--t:4.6s;--w:20px;--r:-10deg"><svg viewBox="0 0 34 24"><rect x="1" y="1" width="32" height="22" rx="2.5" fill="#FDFBF5" stroke="#1B3A6B" stroke-width="1.2"/><path d="M1 1 L17 13 L33 1" fill="none" stroke="#1B3A6B" stroke-width="1.2" stroke-linejoin="round"/></svg></span><span style="--x:50%;--d:2.4s;--t:5.4s;--w:15px;--r:30deg"><svg viewBox="0 0 34 24"><rect x="1" y="1" width="32" height="22" rx="2.5" fill="#FDFBF5" stroke="#1B3A6B" stroke-width="1.2"/><path d="M1 1 L17 13 L33 1" fill="none" stroke="#1B3A6B" stroke-width="1.2" stroke-linejoin="round"/></svg></span><span style="--x:64%;--d:0.3s;--t:4.4s;--w:19px;--r:-28deg"><svg viewBox="0 0 34 24"><rect x="1" y="1" width="32" height="22" rx="2.5" fill="#FDFBF5" stroke="#1B3A6B" stroke-width="1.2"/><path d="M1 1 L17 13 L33 1" fill="none" stroke="#1B3A6B" stroke-width="1.2" stroke-linejoin="round"/></svg></span><span style="--x:78%;--d:1.2s;--t:5.2s;--w:16px;--r:18deg"><svg viewBox="0 0 34 24"><rect x="1" y="1" width="32" height="22" rx="2.5" fill="#FDFBF5" stroke="#1B3A6B" stroke-width="1.2"/><path d="M1 1 L17 13 L33 1" fill="none" stroke="#1B3A6B" stroke-width="1.2" stroke-linejoin="round"/></svg></span><span style="--x:92%;--d:2.9s;--t:4.8s;--w:17px;--r:-14deg"><svg viewBox="0 0 34 24"><rect x="1" y="1" width="32" height="22" rx="2.5" fill="#FDFBF5" stroke="#1B3A6B" stroke-width="1.2"/><path d="M1 1 L17 13 L33 1" fill="none" stroke="#1B3A6B" stroke-width="1.2" stroke-linejoin="round"/></svg></span><span style="--x:42%;--d:3.6s;--t:5.6s;--w:13px;--r:22deg"><svg viewBox="0 0 34 24"><rect x="1" y="1" width="32" height="22" rx="2.5" fill="#FDFBF5" stroke="#1B3A6B" stroke-width="1.2"/><path d="M1 1 L17 13 L33 1" fill="none" stroke="#1B3A6B" stroke-width="1.2" stroke-linejoin="round"/></svg></span></div>
+                  <svg class="gr-env" viewBox="0 0 260 200">
+                    <defs>
+                      <linearGradient id="grEnvPaper" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#FBF8F1"/><stop offset="100%" stop-color="#FFFFFF"/></linearGradient>
+                      <linearGradient id="grEnvFlap" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#F1ECDF"/><stop offset="100%" stop-color="#FBF8F1"/></linearGradient>
+                    </defs>
+                    <rect x="18" y="52" width="224" height="132" rx="8" fill="url(#grEnvPaper)" stroke="rgba(27,58,107,.45)" stroke-width="1.4"/>
+                    <path d="M18 184 L130 110 L242 184" stroke="rgba(27,58,107,.25)" stroke-width="1" fill="none"/>
+                    <path d="M18 52 L130 138 L242 52 Z" fill="url(#grEnvFlap)" stroke="rgba(27,58,107,.45)" stroke-width="1.4" stroke-linejoin="round"/>
+                    <circle cx="130" cy="134" r="24" fill="#1B3A6B"/>
+                    <circle cx="130" cy="134" r="24" fill="none" stroke="#0E2247" stroke-width="2" opacity=".55"/>
+                    <circle cx="130" cy="134" r="18.5" fill="none" stroke="#E3C978" stroke-width="1" opacity=".9"/>
+                    <text x="130" y="144" text-anchor="middle" font-family="'Great Vibes', cursive" font-size="28" fill="#E3C978">L</text>
                   </svg>
                 </div>
                 <div class="gr-title">Lluvia de sobres</div>
@@ -2175,16 +2227,9 @@ body.gift-locked{overflow:hidden}
               </div>
 
               <div class="gr-slide">
-                <div class="gr-logo">
-                  <svg viewBox="0 0 52 52" fill="none" stroke="var(--gold-deep)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="6" y="14" width="40" height="26" rx="4"/>
-                    <path d="M6 21 H46"/>
-                    <path d="M12 32 H22"/>
-                    <path d="M36 30 l4 4 -4 4" opacity=".7"/>
-                  </svg>
-                </div>
+                <div class="gr-logo"><img src="bbva-logo.png" alt="BBVA" width="600" height="180" decoding="async"></div>
                 <div class="gr-title">Transferencia</div>
-                <div class="gr-desc">BBVA<br><b class="gr-num">4152 3141 6223 2238</b><br>Titular: Silvia Yolanda Salcedo Delgado</div>
+                <div class="gr-desc"><b class="gr-num">4152 3141 6223 2238</b><br>Titular: Silvia Yolanda Salcedo Delgado</div>
                 <button class="gr-btn gr-copy" type="button" data-copy="4152314162232238">Copiar número</button>
               </div>
 
@@ -3571,6 +3616,11 @@ setTimeout(function(){
     $$('.ornament svg').forEach(function(o){
       gsap.fromTo(o,{clipPath:'inset(0 50% 0 50%)'},{clipPath:'inset(0 0% 0 0%)',duration:1.1,ease:'power2.inOut',
         scrollTrigger:{trigger:o,start:'top 90%',once:true}});
+    });
+
+    /* Fondos: parallax con el scroll */
+    $$('.sec-flora').forEach(function(f){
+      gsap.fromTo(f,{yPercent:-7},{yPercent:7,ease:'none',scrollTrigger:{trigger:f.parentElement,start:'top bottom',end:'bottom top',scrub:.8}});
     });
 
     /* Familia: nombre por nombre */
