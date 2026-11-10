@@ -1592,6 +1592,8 @@ body.gift-locked{overflow:hidden}
 #ely-confetti{position:fixed;inset:0;z-index:80;pointer-events:none;width:100%;height:100%}
 @media (prefers-reduced-motion:reduce){.ely-full,.ely-full li,.ely-nav{transition-duration:.01s!important}}
 
+/* Itinerario sin horas: el nombre del momento centrado con el punto */
+.itin-item:not(:has(.itin-time)) .itin-evt{padding-top:2px}
 /* ── Ajustes 2 ── */
 /* Lluvia de sobres dentro de la tarjeta */
 .gr-envscene{position:relative;width:min(230px,66vw);aspect-ratio:260/200;margin:0 auto 14px}
@@ -2018,7 +2020,6 @@ body.gift-locked{overflow:hidden}
     <div class="itin-grid" id="itinGrid">
       <div class="itin-spine"></div>
 
-      <!-- 8:30 — izquierda -->
       <div class="itin-item itin-row-l">
         <div class="itin-time">8:30 pm</div>
         <div class="itin-evt">Recepción</div>
@@ -2026,13 +2027,54 @@ body.gift-locked{overflow:hidden}
       <div class="itin-dot-col"><div class="itin-dot"></div></div>
       <div></div>
 
-      <!-- 3:00 — derecha -->
       <div></div>
       <div class="itin-dot-col"><div class="itin-dot"></div></div>
       <div class="itin-item itin-item--r itin-row-r">
+        <div class="itin-evt">Vals de entrada</div>
+      </div>
+
+      <div class="itin-item itin-row-l">
+        <div class="itin-evt">Vals familiar</div>
+      </div>
+      <div class="itin-dot-col"><div class="itin-dot"></div></div>
+      <div></div>
+
+      <div></div>
+      <div class="itin-dot-col"><div class="itin-dot"></div></div>
+      <div class="itin-item itin-item--r itin-row-r">
+        <div class="itin-evt">Baile moderno</div>
+      </div>
+
+      <div class="itin-item itin-row-l">
+        <div class="itin-evt">Brindis</div>
+      </div>
+      <div class="itin-dot-col"><div class="itin-dot"></div></div>
+      <div></div>
+
+      <div></div>
+      <div class="itin-dot-col"><div class="itin-dot"></div></div>
+      <div class="itin-item itin-item--r itin-row-r">
+        <div class="itin-evt">Cena</div>
+      </div>
+
+      <div class="itin-item itin-row-l">
+        <div class="itin-evt">Baile con DJ y animación</div>
+      </div>
+      <div class="itin-dot-col"><div class="itin-dot"></div></div>
+      <div></div>
+
+      <div></div>
+      <div class="itin-dot-col"><div class="itin-dot"></div></div>
+      <div class="itin-item itin-item--r itin-row-r">
+        <div class="itin-evt">Chilaquiles para los trasnochados</div>
+      </div>
+
+      <div class="itin-item itin-row-l">
         <div class="itin-time">3:00 am</div>
         <div class="itin-evt">Fin del evento</div>
       </div>
+      <div class="itin-dot-col"><div class="itin-dot"></div></div>
+      <div></div>
 
     </div>
   </section>
@@ -2495,8 +2537,8 @@ body.gift-locked{overflow:hidden}
     <svg class="vinyl-icon-pause" viewBox="0 0 24 24" fill="#E9EEF7" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
   </div>
 </button>
-<audio id="bgAudio" loop preload="auto">
-  <source src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/audio/xv-diana-victoria/cancion.mp3" type="audio/mpeg">
+<audio id="bgAudio" loop preload="none">
+  <source src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/audio/xv-lila-sanchez-salcedo/cancion.mp3" type="audio/mpeg">
 </audio>
 
 <!-- Flash blanco de transición -->
@@ -3492,7 +3534,7 @@ setTimeout(function(){
    - Si el archivo de la cancion falla (404, host caido, HTML en vez de mp3) se usa una de respaldo. */
 (function(){
   if(window.__elyAudio2) return; window.__elyAudio2=1;
-  var FALLBACK='https://boda-isaac-y-claudia.vercel.app/cancion.mp3';
+  var FALLBACK='https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/audio/xv-lila-sanchez-salcedo/cancion.mp3';
   var forced=false, gestured=false;
   function A(){ return document.querySelector('audio'); }
   function toFallback(a){
