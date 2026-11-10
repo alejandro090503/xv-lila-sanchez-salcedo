@@ -1037,7 +1037,8 @@ body{
 #quote,#familia,#itinerario,#dresscode,#regalos,#rsvp,#countdown{position:relative;isolation:isolate}
 #quote>*:not(.sec-flora),#familia>*:not(.sec-flora),#itinerario>*:not(.sec-flora),
 #dresscode>*:not(.sec-flora),#regalos>*:not(.sec-flora),#rsvp>*:not(.sec-flora),
-#countdown>*:not(.sec-flora){position:relative;z-index:1}
+#countdown>*:not(.sec-flora),#crecer>*:not(.sec-flora),#album>*:not(.sec-flora){position:relative;z-index:1}
+#crecer,#album{isolation:isolate}
 .ornament{position:relative;z-index:1;background:transparent}
 
 /* ════════ HERO REDISEÑADO ════════ */
@@ -1623,11 +1624,24 @@ body.gift-locked{overflow:hidden}
 
 /* Fondos con más movimiento */
 @media (prefers-reduced-motion:no-preference){
-  .sec-flora{animation:floraDrift 16s ease-in-out infinite alternate}
-  #familia .sec-flora,#dresscode .sec-flora,#album .sec-flora{animation-duration:19s;animation-direction:alternate-reverse}
-  @keyframes floraDrift{0%{translate:-2.5% 1.5%;scale:1.06;rotate:-1deg}100%{translate:2.5% -2%;scale:1.13;rotate:1.2deg}}
-  .hero-bg{animation:heroDrift 18s ease-in-out infinite alternate!important}
-  @keyframes heroDrift{0%{scale:1;translate:0 0}100%{scale:1.1;translate:-2% -1.5%}}
+  .sec-flora{animation:floraDrift 13s ease-in-out infinite}
+  #countdown .sec-flora,#familia .sec-flora,#itinerario .sec-flora,#regalos .sec-flora{animation-name:floraDrift2;animation-duration:15s}
+  #dresscode .sec-flora,#album .sec-flora,#crecer .sec-flora{animation-duration:17s;animation-delay:-6s}
+  @keyframes floraDrift{
+    0%,100%{translate:0 0;scale:1.08;rotate:0deg}
+    25%{translate:2.2% -1.6%;scale:1.11;rotate:.8deg}
+    50%{translate:-.6% -3%;scale:1.13;rotate:-.4deg}
+    75%{translate:-2.4% -1%;scale:1.10;rotate:-1deg}}
+  @keyframes floraDrift2{
+    0%,100%{translate:0 0;scale:1.09;rotate:0deg}
+    30%{translate:-2.4% 1.4%;scale:1.12;rotate:-.9deg}
+    60%{translate:1.2% 2.6%;scale:1.14;rotate:.6deg}
+    80%{translate:2.4% .4%;scale:1.10;rotate:1deg}}
+  .hero-bg{animation:heroDrift 16s ease-in-out infinite!important}
+  @keyframes heroDrift{
+    0%,100%{scale:1.04;translate:0 0;rotate:0deg}
+    33%{scale:1.09;translate:-1.8% -1.2%;rotate:.5deg}
+    66%{scale:1.07;translate:1.6% -2%;rotate:-.5deg}}
 }
 
 /* Álbum: QR difuminado */
@@ -3603,7 +3617,6 @@ setTimeout(function(){
     if(reduce || typeof gsap==='undefined' || typeof ScrollTrigger==='undefined') return;
 
     /* Hero: parallax */
-    gsap.to('.hero-bg',{yPercent:16,scale:1.08,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:.6}});
     gsap.to('.hero-content',{y:-90,opacity:0,ease:'none',scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom 15%',scrub:.6}});
 
     /* Títulos: se escriben de izquierda a derecha */
@@ -3616,11 +3629,6 @@ setTimeout(function(){
     $$('.ornament svg').forEach(function(o){
       gsap.fromTo(o,{clipPath:'inset(0 50% 0 50%)'},{clipPath:'inset(0 0% 0 0%)',duration:1.1,ease:'power2.inOut',
         scrollTrigger:{trigger:o,start:'top 90%',once:true}});
-    });
-
-    /* Fondos: parallax con el scroll */
-    $$('.sec-flora').forEach(function(f){
-      gsap.fromTo(f,{yPercent:-7},{yPercent:7,ease:'none',scrollTrigger:{trigger:f.parentElement,start:'top bottom',end:'bottom top',scrub:.8}});
     });
 
     /* Familia: nombre por nombre */
