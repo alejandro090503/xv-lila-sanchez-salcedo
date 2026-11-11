@@ -2414,8 +2414,7 @@ body.gift-locked{overflow:hidden}
       <figure class="crece-item"><div class="crece-frame"><div class="crece-pic" data-speed="-40"><img src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/xv-lila-sanchez-salcedo/crece-05.jpg" alt="Lila, foto 5 de su historia" loading="lazy" decoding="async"></div></div></figure>
       <figure class="crece-item"><div class="crece-frame"><div class="crece-pic" data-speed="-50"><img src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/xv-lila-sanchez-salcedo/crece-06.jpg" alt="Lila, foto 6 de su historia" loading="lazy" decoding="async"></div></div></figure>
       <figure class="crece-item"><div class="crece-frame"><div class="crece-pic" data-speed="-30"><img src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/xv-lila-sanchez-salcedo/crece-07.jpg" alt="Lila, foto 7 de su historia" loading="lazy" decoding="async"></div></div></figure>
-      <figure class="crece-item"><div class="crece-frame"><div class="crece-pic" data-speed="-55"><img src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/xv-lila-sanchez-salcedo/crece-08.jpg" alt="Lila, foto 8 de su historia" loading="lazy" decoding="async"></div></div></figure>
-      <figure class="crece-item"><div class="crece-frame"><div class="crece-pic" data-speed="-45"><img src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/xv-lila-sanchez-salcedo/crece-09.jpg" alt="Lila, foto 9 de su historia" loading="lazy" decoding="async"></div></div><figcaption><div class="crece-age">Hoy, mis XV años</div></figcaption></figure>
+      <figure class="crece-item"><div class="crece-frame"><div class="crece-pic" data-speed="-55"><img src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/xv-lila-sanchez-salcedo/crece-08.jpg" alt="Lila, foto 8 de su historia" loading="lazy" decoding="async"></div></div><figcaption><div class="crece-age">Y sigo creciendo</div></figcaption></figure>
     </div>
   </section>
 
@@ -2802,6 +2801,9 @@ function launchSparkle(){
   var pasesAsignados = (isNaN(rawP) || rawP < 1 || rawP > 20) ? 1 : rawP;
   /* Lo que va a ocupar: arranca en 1 y nunca pasa del tope */
   var pasesAUsar = 1;
+  /* Link general (?pases=N, sin nombre): la confirmación se manda por WhatsApp */
+  var WA_NUM = '522292925559';
+  var waMode = !urlPara;
 
   var rsvpChoice = null, savedNames = [], sending = false, bloqueado = false;
   var $ = function(id){ return document.getElementById(id); };
@@ -2840,20 +2842,21 @@ function launchSparkle(){
   }
 
   function pintaPases(){
-    if(!urlPara){ pasesBox.style.display = 'none'; return; }
+    if(!urlPara && !waMode){ pasesBox.style.display = 'none'; return; }
     pasesNumEl.textContent = pasesAsignados;
     pasesBox.style.display = 'flex';
   }
 
   /* savedNames guarda por posición: bajar y volver a subir el contador no
      borra lo que ya se escribió. */
-  function renderFields(){
+  function renderFields(soloUno){
     Array.prototype.forEach.call(fieldsEl.querySelectorAll('input'), function(inp, i){ savedNames[i] = inp.value; });
     fieldsEl.innerHTML = '';
-    for(var i=0;i<pasesAUsar;i++){
+    var total = soloUno ? 1 : pasesAUsar;
+    for(var i=0;i<total;i++){
       var inp = document.createElement('input');
       inp.className = 'rsvp-input'; inp.type = 'text'; inp.maxLength = 60; inp.autocomplete = 'off';
-      inp.placeholder = pasesAUsar === 1 ? 'Tu nombre completo' : 'Nombre completo del invitado ' + (i+1);
+      inp.placeholder = total === 1 ? 'Tu nombre completo' : 'Nombre completo del invitado ' + (i+1);
       inp.value = savedNames[i] || '';
       inp.addEventListener('input', function(){ this.classList.remove('rsvp-input-falta'); });
       inp.disabled = frozen || bloqueado;
@@ -2899,6 +2902,11 @@ function launchSparkle(){
       contWrap.style.display = '';
       pintaContador();
       renderFields();
+      fieldsEl.style.display = '';
+    } else if(waMode){
+      /* Para avisar que no va, solo pedimos su nombre */
+      contWrap.style.display = 'none';
+      renderFields(true);
       fieldsEl.style.display = '';
     } else {
       contWrap.style.display = 'none';
@@ -2983,15 +2991,43 @@ function launchSparkle(){
         applyFreeze();
       });
   } else {
-    /* Sin link personalizado no hay invitación que registrar */
-    if(avisoEl) avisoEl.style.display = 'block';
+    /* Link general: se confirma por WhatsApp */
+    if(avisoEl) avisoEl.style.display = 'none';
+    if(!frozen) enable(true);
     applyFreeze();
+  }
+
+  function enviarWhatsApp(){
+    var inputs = Array.prototype.slice.call(fieldsEl.querySelectorAll('input'));
+    var nombres = inputs.map(function(i){ return i.value.trim(); });
+    var vacio = null;
+    inputs.forEach(function(inp, i){ var f = !nombres[i]; inp.classList.toggle('rsvp-input-falta', f); if(f && !vacio) vacio = inp; });
+    if(vacio){
+      msg(inputs.length === 1 ? 'Escribe tu nombre para continuar.' : 'Escribe el nombre de cada persona o baja el contador a los pases que vas a utilizar.', true);
+      vacio.focus({ preventScroll: true });
+      return;
+    }
+    var texto;
+    if(rsvpChoice === 'yes'){
+      texto = '¡Hola! Confirmo mi asistencia a los XV años de Lila 💙\n\n' +
+        'Pases: ' + nombres.length + (pasesAsignados > 1 ? ' de ' + pasesAsignados : '') + '\n' +
+        nombres.map(function(n, i){ return (i+1) + '. ' + n; }).join('\n') +
+        '\n\nSábado 27 de marzo de 2027 · Salón Banyak';
+    } else {
+      texto = 'Hola, soy ' + nombres[0] + '. Lamentablemente no podré asistir a los XV años de Lila. ¡Muchas felicidades!';
+    }
+    var url = 'https://wa.me/' + WA_NUM + '?text=' + encodeURIComponent(texto);
+    var w = window.open(url, '_blank');
+    if(!w) window.location.href = url;
+    savedNames = nombres.slice();
+    mostrarGracias(rsvpChoice === 'yes' ? 'confirmado' : 'declino', nombres);
+    gSubEl.textContent += ' Envía el mensaje que se abrió en WhatsApp para que tu respuesta quede registrada.';
   }
 
   confirmBtn.addEventListener('click', function(){
     if(sending || frozen || bloqueado || confirmBtn.disabled) return;
-    if(!urlPara){ msg('Para confirmar necesitas abrir el enlace personalizado que te enviamos por WhatsApp.', true); return; }
     if(!rsvpChoice){ msg('Por favor elige si podrás asistir.', true); return; }
+    if(waMode){ enviarWhatsApp(); return; }
     var nombres = [];
     if(rsvpChoice === 'yes'){
       nombres = Array.prototype.slice.call(fieldsEl.querySelectorAll('input'))
